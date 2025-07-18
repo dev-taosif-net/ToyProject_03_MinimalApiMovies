@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region =========Services=========
 
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder => policyBuilder.WithOrigins(builder.Configuration["AllowedCORSOrigins"] ?? string.Empty) .AllowAnyMethod().AllowAnyHeader());
@@ -19,7 +20,13 @@ var app = builder.Build();
 
 #region =========Pipeline && Middleware=========
 
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.UseHttpsRedirection();
 app.UseCors();
