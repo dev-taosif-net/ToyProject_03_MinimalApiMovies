@@ -11,6 +11,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policyBuilder => policyBuilder.WithOrigins(builder.Configuration["AllowedCORSOrigins"] ?? string.Empty) .AllowAnyMethod().AllowAnyHeader());
     options.AddPolicy("AllowAllOrigins", policyBuilder => policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
+builder.Services.AddOutputCache();
 
 #endregion
 
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseOutputCache();
 
 app.MapGet("/", () => "Hello Taosif");
 app.MapGet("/genres", [EnableCors(PolicyName = "AllowAllOrigins")] () =>
@@ -34,9 +36,7 @@ app.MapGet("/genres", [EnableCors(PolicyName = "AllowAllOrigins")] () =>
         new() { Id = 4, Name = "Sci-Fi" }
     };
     return genres;
-});
-
-
+}).CacheOutput(x=> x.Expire(TimeSpan.FromSeconds(60)));
 #endregion
 
 app.Run();
