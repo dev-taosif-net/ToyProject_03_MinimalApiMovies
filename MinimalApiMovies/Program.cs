@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using MinimalApiMovies.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 #region =========Services=========
 
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder => policyBuilder.WithOrigins(builder.Configuration["AllowedCORSOrigins"] ?? string.Empty) .AllowAnyMethod().AllowAnyHeader());
+    options.AddPolicy("AllowAllOrigins", policyBuilder => policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
 
 #endregion
 
@@ -15,9 +21,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.MapGet("/", () => "Hello Taosif");
-app.MapGet("/genres", () =>
+app.MapGet("/genres", [EnableCors(PolicyName = "AllowAllOrigins")] () =>
 {
     var genres = new List<Genre>
     {
@@ -28,6 +35,7 @@ app.MapGet("/genres", () =>
     };
     return genres;
 });
+
 
 #endregion
 
