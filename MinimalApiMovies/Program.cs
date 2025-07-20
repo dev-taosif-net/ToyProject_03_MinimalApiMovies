@@ -90,7 +90,6 @@ app.MapDelete("/genres/{id:long}",
         return Results.NoContent();
     });
 
-
 #endregion
 
 app.Run();
