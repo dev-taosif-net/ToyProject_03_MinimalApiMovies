@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using MinimalApiMovies;
 using MinimalApiMovies.Endpoints;
-using MinimalApiMovies.Entities;
 using MinimalApiMovies.Services.Genre;
 
 var builder = WebApplication.CreateBuilder(args);
