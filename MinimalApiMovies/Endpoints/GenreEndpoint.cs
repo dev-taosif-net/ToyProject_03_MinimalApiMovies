@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
+using MinimalApiMovies.Dtos.Genre;
 using MinimalApiMovies.Entities;
 using MinimalApiMovies.Services.Genre;
 
@@ -24,8 +25,10 @@ public static class GenreEndpoint
 
         return group;
     }
-    static async Task<Ok<List<Genre>>> GetGenres(IGenreRepository genreRepository)
+    static async Task<Ok<List<GetGenreDto>>> GetGenres(IGenreRepository genreRepository)
     {
+        var data = await genreRepository.GetAll();
+
         return TypedResults.Ok(await genreRepository.GetAll());
     }
 
