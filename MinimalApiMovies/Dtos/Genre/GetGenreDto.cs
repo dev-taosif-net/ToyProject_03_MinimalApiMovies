@@ -8,15 +8,3 @@ public class GetGenreDto
     public required string Name { get; set; }
 }
 
-
-public static class GenreExtensions
-{
-    public static GetGenreDto FromEntity(this Entities.Genre entity)
-    {
-        return new GetGenreDto
-        {
-            Id = entity.Id,
-            Name = entity.Name
-        };
-    }
-}

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.OutputCaching;
 using MinimalApiMovies.Dtos.Genre;
 using MinimalApiMovies.Entities;
+using MinimalApiMovies.Mappings;
 using MinimalApiMovies.Services.Genre;
 
 namespace MinimalApiMovies.Endpoints;
@@ -25,16 +26,18 @@ public static class GenreEndpoint
 
         return group;
     }
+
     static async Task<Ok<List<GetGenreDto>>> GetGenres(IGenreRepository genreRepository)
     {
-        var data = await genreRepository.GetAll();
-
-        return TypedResults.Ok(await genreRepository.GetAll());
+        var data = (await genreRepository.GetAll())?.Select(x => x.FromEntity()).ToList() ?? new List<GetGenreDto>() ;
+        return TypedResults.Ok(data);
     }
 
-    static async Task<Results<Ok<Genre>, NotFound>> GetGenreById(long id, IGenreRepository genreRepository)
+
+
+    static async Task<Results<Ok<GetGenreDto>, NotFound>> GetGenreById(long id, IGenreRepository genreRepository)
     {
-        var data = await genreRepository.GetById(id);
+        var data = ( await genreRepository.GetById(id)).FromEntity();
         return data == null ? TypedResults.NotFound() : TypedResults.Ok(data);
     }
 
